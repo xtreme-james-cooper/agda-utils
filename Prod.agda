@@ -1,5 +1,11 @@
 module AgdaUtils.Prod where
 
+data _\/_ (A B : Set) : Set where
+  InL : A -> A \/ B
+  InR : B -> A \/ B
+
+infix 30 _\/_
+
 data _*_ (A : Set) (B : A -> Set) : Set where
   _,_ : (a : A) (b : B a) -> A * B
 
