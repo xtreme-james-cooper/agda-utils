@@ -11,6 +11,9 @@ data _*_ (A : Set) (B : A -> Set) : Set where
 
 infixr 30 _*_
 
+fst : {A : Set} {B : A -> Set} -> A * B -> A
+fst (a , b) = a
+
 data _×_ (A B : Set) : Set where
   _,_ : A -> B -> A × B
 
