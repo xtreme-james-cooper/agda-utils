@@ -37,6 +37,21 @@ filter p (a :: as) with p a | filter p as
 filter p (a :: as) | Yes _  | n , as' = Suc n , a :: as'
 filter p (a :: as) | No _   | n , as' = n , as'
 
+-- equality 
+
+vectEq : {A : Set} {n : nat} -> equality A -> equality (vect A n)
+vectEq aeq []        []          = Yes Refl
+vectEq aeq (a :: as) (b :: bs)   with aeq a b | vectEq aeq as bs
+vectEq aeq (a :: as) (.a :: .as) | Yes Refl   | Yes Refl = Yes Refl
+vectEq aeq (a :: as) (.a :: bs)  | Yes Refl   | No neq   = No (lemma a as bs neq)
+  where 
+    lemma : {A : Set} {n : nat} (a : A) (as bs : vect A n) -> not (as == bs) -> not (a :: as == a :: bs)
+    lemma a as .as neq Refl = neq Refl
+vectEq aeq (a :: as) (b :: bs)   | No neq     | _        = No (lemma a b as bs neq)
+  where 
+    lemma : {A : Set} {n : nat} (a b : A) (as bs : vect A n) -> not (a == b) -> not (a :: as == b :: bs)
+    lemma a .a as .as neq Refl = neq Refl
+
 -- Lemmas
 
 lookupInsertAt : {A : Set} {n : nat} (vs : vect A n) (x : fin (Suc n)) (v : A) -> insertAt x vs v ! x == v
