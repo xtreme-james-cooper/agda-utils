@@ -202,3 +202,26 @@ fdecrBelow : {n : nat} (x y : fin n) (neq : not (FS x == weaken y)) -> x >=F y -
 fdecrBelow x      FZ     neq gt = Refl
 fdecrBelow FZ     (FS y) neq ()
 fdecrBelow (FS x) (FS y) neq (S>=S gt) rewrite fdecrBelow x y (neqFS neq) gt = Refl
+
+weakenEqDown : {n m : nat} {x : fin n} {y : fin m} -> naturalize x == naturalize y -> naturalize (weaken x) == naturalize y
+weakenEqDown {x = FZ}   {FZ}   eq = Refl
+weakenEqDown {x = FZ}   {FS y} ()
+weakenEqDown {x = FS x} {FZ}   ()
+weakenEqDown {x = FS x} {FS y} eq = funEq Suc (weakenEqDown (eqSDown eq))
+
+squeezeUp : {n : nat} (x : fin (Suc n)) -> not (n == naturalize x) -> fin (Suc n)
+squeezeUp {Zero}  FZ      neq with neq Refl
+squeezeUp {Zero}  FZ      neq | ()
+squeezeUp {Suc n} FZ      neq = FS FZ
+squeezeUp {Zero}  (FS ()) neq
+squeezeUp {Suc n} (FS x)  neq = FS (squeezeUp x (neqSDown neq))
+
++mod' : {n m : nat} (x : fin n) (x' : fin m) -> fin n -> naturalize x == naturalize x' -> fin n
++mod' {Suc n} FZ     x'      y eq = y
++mod' {Suc n} (FS x) FZ      y ()
++mod' {Suc n} (FS x) (FS x') y eq with natEq n (naturalize y)
++mod' {Suc n} (FS x) (FS x') y eq | Yes eq' = weaken x
++mod' {Suc n} (FS x) (FS x') y eq | No neq  = +mod' (weaken x) x' (squeezeUp y neq) (weakenEqDown (eqSDown eq))
+
+_+mod_ : {n : nat} -> fin n -> fin n -> fin n
+x +mod y = +mod' x x y Refl

@@ -19,3 +19,6 @@ data _×_ (A B : Set) : Set where
 
 infixr 30 _×_
 infixr 20 _,_
+
+fst' : {A B : Set} -> A × B -> A
+fst' (a , b) = a

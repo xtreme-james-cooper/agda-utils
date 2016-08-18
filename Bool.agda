@@ -26,4 +26,6 @@ andFalse : {b : bool} -> (b and False) == False
 andFalse {True}  = Refl
 andFalse {False} = Refl
 
-
+truthify : bool -> Set
+truthify True  = Unit
+truthify False = Falsity

@@ -12,6 +12,9 @@ neqS a .a neq Refl = neq Refl
 neqSDown : {a b : nat} -> not (Suc a == Suc b) -> not (a == b)
 neqSDown {a} {.a} neq Refl = neq Refl
 
+eqSDown : {a b : nat} -> Suc a == Suc b -> a == b
+eqSDown {a} {.a} Refl = Refl
+
 natEq : equality nat
 natEq Zero    Zero     = Yes Refl
 natEq Zero    (Suc b)  = No (λ ())

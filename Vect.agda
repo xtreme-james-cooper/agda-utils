@@ -18,6 +18,12 @@ x :: v ! FS f = v ! f
 
 infixl 60 _!_
 
+_++_ : {A : Set} {n m : nat} -> vect A n -> vect A m -> vect A (n + m)
+[]        ++ bs = bs
+(x :: as) ++ bs = x :: as ++ bs
+
+infixr 70 _++_
+
 insertAt : {A : Set} {n : nat} -> fin (Suc n) -> vect A n -> A -> vect A (Suc n)
 insertAt FZ      vect        a = a :: vect
 insertAt (FS ()) []          a
@@ -36,6 +42,10 @@ filter p []        = Zero , []
 filter p (a :: as) with p a | filter p as
 filter p (a :: as) | Yes _  | n , as' = Suc n , a :: as'
 filter p (a :: as) | No _   | n , as' = n , as'
+
+foldr : {A B : Set} {n : nat} -> (A -> B -> B) -> B -> vect A n -> B
+foldr f b []        = b
+foldr f b (a :: as) = f a (foldr f b as)
 
 -- equality 
 
