@@ -47,6 +47,10 @@ foldr : {A B : Set} {n : nat} -> (A -> B -> B) -> B -> vect A n -> B
 foldr f b []        = b
 foldr f b (a :: as) = f a (foldr f b as)
 
+all : {A : Set} {n : nat} -> (A -> Set) -> vect A n -> Set
+all P []        = Unit
+all P (a :: as) = P a × all P as
+
 -- equality 
 
 vectEq : {A : Set} {n : nat} -> equality A -> equality (vect A n)

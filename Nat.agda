@@ -6,6 +6,8 @@ data nat : Set where
   Zero : nat
   Suc : nat -> nat
 
+{-# BUILTIN NATURAL nat #-}
+
 neqS : (a b : nat) -> not (a == b) -> not (Suc a == Suc b)
 neqS a .a neq Refl = neq Refl
 

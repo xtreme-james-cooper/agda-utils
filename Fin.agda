@@ -225,3 +225,6 @@ squeezeUp {Suc n} (FS x)  neq = FS (squeezeUp x (neqSDown neq))
 
 _+mod_ : {n : nat} -> fin n -> fin n -> fin n
 x +mod y = +mod' x x y Refl
+
+infix 70 _+mod_
+

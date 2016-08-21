@@ -7,9 +7,6 @@ data Falsity : Set where
 not : {i : Level} -> Set i -> Set i
 not x = x -> Falsity
 
-data Unit : Set where
-  TT : Unit
-
 data _==_ {i : Level} {A : Set i} (a : A) : A -> Set i where
   Refl : a == a
 
@@ -37,6 +34,12 @@ decideNot (No na) = Yes na
 
 equality : Set -> Set
 equality A = (a b : A) -> decide (a == b)
+
+data Unit : Set where
+  TT : Unit
+
+unitSingleton : (x : Unit) -> x == TT
+unitSingleton TT = Refl
 
 -- inspect
 

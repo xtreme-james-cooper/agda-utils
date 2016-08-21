@@ -8,6 +8,17 @@ data order : Set where
   EQ : order
   GT : order
 
+orderEq : equality order
+orderEq LT LT = Yes Refl
+orderEq LT EQ = No (λ ())
+orderEq LT GT = No (λ ())
+orderEq EQ LT = No (λ ())
+orderEq EQ EQ = Yes Refl
+orderEq EQ GT = No (λ ())
+orderEq GT LT = No (λ ())
+orderEq GT EQ = No (λ ())
+orderEq GT GT = Yes Refl
+
 antisymmetric : {A : Set} -> (A -> A -> order) -> Set
 antisymmetric {A} comp = (a b : A) -> (comp a b == EQ -> a == b) × (not (comp a b == EQ) -> not (a == b)) × (comp a b == LT -> comp b a == GT)
 

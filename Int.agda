@@ -19,6 +19,51 @@ data normalInt : intType -> Set where
 data int : Set where
   Int : {t : intType} -> normalInt t -> int
 
+intEq : equality int
+intEq (Int {t1} a) (Int {t2} b) with intTypeEq t1 t2
+  where
+    intTypeEq : equality intType
+    intTypeEq Pos  Pos  = Yes Refl
+    intTypeEq Pos  Neg  = No (λ ())
+    intTypeEq Pos  Zero = No (λ ())
+    intTypeEq Neg  Pos  = No (λ ())
+    intTypeEq Neg  Neg  = Yes Refl
+    intTypeEq Neg  Zero = No (λ ())
+    intTypeEq Zero Pos  = No (λ ())
+    intTypeEq Zero Neg  = No (λ ())
+    intTypeEq Zero Zero = Yes Refl
+intEq (Int {t1} a) (Int {.t1} b) | Yes Refl with normalIntEq a b
+  where
+    sucEqDown : {a b : normalInt Pos} -> Suc a == Suc b -> a == b
+    sucEqDown Refl = Refl
+
+    predEqDown : {a b : normalInt Neg} -> Pred a == Pred b -> a == b
+    predEqDown Refl = Refl
+
+    normalIntEq : {t : intType} -> equality (normalInt t)
+    normalIntEq Zero     Zero      = Yes Refl
+    normalIntEq One      One       = Yes Refl
+    normalIntEq One      (Suc b)   = No (λ ())
+    normalIntEq (Suc a)  One       = No (λ ())
+    normalIntEq (Suc a)  (Suc b)   with normalIntEq a b
+    normalIntEq (Suc a)  (Suc .a)  | Yes Refl = Yes Refl
+    normalIntEq (Suc a)  (Suc b)   | No neq   = No (λ eq -> neq (sucEqDown eq))
+    normalIntEq NegOne   NegOne    = Yes Refl
+    normalIntEq NegOne   (Pred b)  = No (λ ())
+    normalIntEq (Pred a) NegOne    = No (λ ())
+    normalIntEq (Pred a) (Pred b)  with normalIntEq a b
+    normalIntEq (Pred a) (Pred .a) | Yes Refl = Yes Refl
+    normalIntEq (Pred a) (Pred b)  | No neq   = No (λ eq -> neq (predEqDown eq))
+intEq (Int {t1} a) (Int {.t1} .a) | Yes Refl | Yes Refl = Yes Refl
+intEq (Int {t1} a) (Int {.t1} b)  | Yes Refl | No neq   = No (λ eq -> neq (normEqDown eq))
+  where
+    normEqDown : {t : intType} {a b : normalInt t} -> Int a == Int b -> a == b
+    normEqDown Refl = Refl
+intEq (Int {t1} a) (Int {t2} b)   | No neq   = No (λ eq -> neq (typeEqDown eq))
+  where
+    typeEqDown : {t1 t2 : intType} {a : normalInt t1} {b : normalInt t2} -> Int a == Int b -> t1 == t2
+    typeEqDown Refl = Refl
+
 intComp : int -> int -> order
 intComp (Int Zero)     (Int Zero)     = EQ
 intComp (Int Zero)     (Int One)      = LT

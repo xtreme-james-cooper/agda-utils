@@ -22,3 +22,8 @@ infixr 20 _,_
 
 fst' : {A B : Set} -> A × B -> A
 fst' (a , b) = a
+
+_<->_ : Set -> Set -> Set
+A <-> B = (A -> B) × (B -> A)
+
+infix 30 _<->_
