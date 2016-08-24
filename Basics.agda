@@ -35,10 +35,10 @@ decideNot (No na) = Yes na
 equality : Set -> Set
 equality A = (a b : A) -> decide (a == b)
 
-data Unit : Set where
-  TT : Unit
+data unit : Set where
+  TT : unit
 
-unitSingleton : (x : Unit) -> x == TT
+unitSingleton : (x : unit) -> x == TT
 unitSingleton TT = Refl
 
 -- inspect

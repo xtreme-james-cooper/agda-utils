@@ -48,6 +48,10 @@ infix 50 _>_
 sucNrefl : {n : nat} -> not (n > n)
 sucNrefl (S>S n .n gt) = sucNrefl gt
 
+gtNsym : {n m : nat} -> n > m -> not (m > n)
+gtNsym (S>Z a)      ()
+gtNsym (S>S a b gt) (S>S .b .a gt') = gtNsym gt gt'
+
 sucGt : {n : nat} -> Suc n > n
 sucGt {Zero}  = S>Z Zero
 sucGt {Suc n} = S>S (Suc n) n sucGt
